@@ -499,7 +499,7 @@ const file_sensor_proto_rawDesc = "" +
 	"\x14SEVERITY_UNSPECIFIED\x10\x00\x12\x11\n" +
 	"\rSEVERITY_INFO\x10\x01\x12\x14\n" +
 	"\x10SEVERITY_WARNING\x10\x02\x12\x15\n" +
-	"\x11SEVERITY_CRITICAL\x10\x03B>Z<iot-sensordata-processor/s2-data-processor/gen/iot_pb;iot_pbb\x06proto3"
+	"\x11SEVERITY_CRITICAL\x10\x03B9Z7iot-sensordata-processor/service-2-go/gen/iot_pb;iot_pbb\x06proto3"
 
 var (
 	file_sensor_proto_rawDescOnce sync.Once

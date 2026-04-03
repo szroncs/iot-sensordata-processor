@@ -1,0 +1,2 @@
+main.go:10:2: no required module provides package github.com/eclipse/paho.mqtt.golang; to add it:
+	go get github.com/eclipse/paho.mqtt.golang

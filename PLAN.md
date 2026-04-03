@@ -178,4 +178,3 @@ Egy sima tartalomjegyzék dedikáltan az ábráknak
 - https://www.researchgate.net/profile/Rajmund-Drenyovszki
 
 ## Melléklet
-

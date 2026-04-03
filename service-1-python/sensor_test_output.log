@@ -1,0 +1,613 @@
+2026-04-03 18:21:14,022 - INFO - DEBUG_CONSOLE_ONLY is set. Bypassing MQTT connection.
+2026-04-03 18:21:14,022 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Office-C"
+ts {
+  seconds: 1775240474
+  nanos: 22804000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:21:16,023 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240476
+  nanos: 22974000
+}
+temperature {
+  value: 587.62
+}
+
+2026-04-03 18:21:18,023 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240478
+  nanos: 23304000
+}
+gas {
+  co2_ppm: 43693.6914
+  lpg_presence: 4236.6
+}
+
+2026-04-03 18:21:20,023 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240480
+  nanos: 23543000
+}
+temperature {
+  value: -101.77
+}
+
+2026-04-03 18:21:22,023 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240482
+  nanos: 23763000
+}
+humidity {
+  value: 28.55
+}
+
+2026-04-03 18:21:24,024 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Office-C"
+ts {
+  seconds: 1775240484
+  nanos: 23992000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:21:26,024 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240486
+  nanos: 24226000
+}
+humidity {
+  value: 51.84
+}
+
+2026-04-03 18:21:28,024 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240488
+  nanos: 24446000
+}
+humidity {
+  value: 82.24
+}
+
+2026-04-03 18:21:30,024 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240490
+  nanos: 24660000
+}
+gas {
+  co2_ppm: 1637.14
+  lpg_presence: 3368.33
+}
+
+2026-04-03 18:21:32,024 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240492
+  nanos: 24881000
+}
+humidity {
+  value: 85.57
+}
+
+2026-04-03 18:21:34,025 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Office-C"
+ts {
+  seconds: 1775240494
+  nanos: 25123000
+}
+alert {
+  active: true
+  severity: SEVERITY_CRITICAL
+}
+
+2026-04-03 18:21:36,025 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240496
+  nanos: 25341000
+}
+humidity {
+  value: 14.34
+}
+
+2026-04-03 18:21:38,025 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240498
+  nanos: 25560000
+}
+alert {
+  active: true
+  severity: SEVERITY_CRITICAL
+}
+
+2026-04-03 18:21:40,025 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240500
+  nanos: 25773000
+}
+temperature {
+  value: -160.95
+}
+
+2026-04-03 18:21:42,026 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240502
+  nanos: 25990000
+}
+temperature {
+  value: 705.29
+}
+
+2026-04-03 18:21:44,026 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240504
+  nanos: 26204000
+}
+door {
+}
+
+2026-04-03 18:21:46,026 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240506
+  nanos: 26417000
+}
+gas {
+  co2_ppm: 10086.8896
+  lpg_presence: 5765.69
+}
+
+2026-04-03 18:21:48,026 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240508
+  nanos: 26635000
+}
+temperature {
+  value: 830.12
+}
+
+2026-04-03 18:21:50,026 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240510
+  nanos: 26857000
+}
+humidity {
+  value: 40.52
+}
+
+2026-04-03 18:21:52,027 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240512
+  nanos: 27082000
+}
+gas {
+  co2_ppm: 32048.6504
+  lpg_presence: 2801.34
+}
+
+2026-04-03 18:21:54,027 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240514
+  nanos: 27301000
+}
+alert {
+  active: true
+  severity: SEVERITY_WARNING
+}
+
+2026-04-03 18:21:56,027 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Office-C"
+ts {
+  seconds: 1775240516
+  nanos: 27519000
+}
+door {
+}
+
+2026-04-03 18:21:58,027 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240518
+  nanos: 27740000
+}
+temperature {
+  value: 617.24
+}
+
+2026-04-03 18:22:00,028 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240520
+  nanos: 27961000
+}
+gas {
+  co2_ppm: 47521.4414
+  lpg_presence: 9212.56
+}
+
+2026-04-03 18:22:02,028 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240522
+  nanos: 28187000
+}
+door {
+}
+
+2026-04-03 18:22:04,028 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240524
+  nanos: 28409000
+}
+temperature {
+  value: -19.59
+}
+
+2026-04-03 18:22:06,028 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240526
+  nanos: 28639000
+}
+humidity {
+  value: 20.49
+}
+
+2026-04-03 18:22:08,028 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240528
+  nanos: 28868000
+}
+temperature {
+  value: 786.23
+}
+
+2026-04-03 18:22:10,029 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Office-C"
+ts {
+  seconds: 1775240530
+  nanos: 29108000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:22:12,029 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240532
+  nanos: 29335000
+}
+humidity {
+  value: 91.86
+}
+
+2026-04-03 18:22:14,029 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240534
+  nanos: 29570000
+}
+humidity {
+  value: 85.65
+}
+
+2026-04-03 18:22:16,029 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Office-C"
+ts {
+  seconds: 1775240536
+  nanos: 29802000
+}
+door {
+}
+
+2026-04-03 18:22:18,030 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240538
+  nanos: 30012000
+}
+door {
+}
+
+2026-04-03 18:22:20,030 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240540
+  nanos: 30232000
+}
+temperature {
+  value: 439.03
+}
+
+2026-04-03 18:22:22,030 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240542
+  nanos: 30449000
+}
+gas {
+  co2_ppm: 29274.4199
+  lpg_presence: 6527.21
+}
+
+2026-04-03 18:22:24,030 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240544
+  nanos: 30671000
+}
+temperature {
+  value: 457.53
+}
+
+2026-04-03 18:22:26,030 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240546
+  nanos: 30902000
+}
+temperature {
+  value: -168.03
+}
+
+2026-04-03 18:22:28,031 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240548
+  nanos: 31140000
+}
+gas {
+  co2_ppm: 30054.5391
+  lpg_presence: 8392.29
+}
+
+2026-04-03 18:22:30,031 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240550
+  nanos: 31484000
+}
+temperature {
+  value: 262.53
+}
+
+2026-04-03 18:22:32,031 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240552
+  nanos: 31810000
+}
+temperature {
+  value: -123.98
+}
+
+2026-04-03 18:22:34,032 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Office-C"
+ts {
+  seconds: 1775240554
+  nanos: 32060000
+}
+humidity {
+  value: 67.27
+}
+
+2026-04-03 18:22:36,032 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240556
+  nanos: 32294000
+}
+door {
+}
+
+2026-04-03 18:22:38,032 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240558
+  nanos: 32516000
+}
+temperature {
+  value: 817.13
+}
+
+2026-04-03 18:22:40,032 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Office-C"
+ts {
+  seconds: 1775240560
+  nanos: 32741000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:22:42,033 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240562
+  nanos: 32962000
+}
+gas {
+  co2_ppm: 20266.5098
+  lpg_presence: 8318.19
+}
+
+2026-04-03 18:22:44,033 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240564
+  nanos: 33180000
+}
+temperature {
+  value: -109.14
+}
+
+2026-04-03 18:22:46,033 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Office-C"
+ts {
+  seconds: 1775240566
+  nanos: 33395000
+}
+gas {
+  co2_ppm: 44889.7812
+  lpg_presence: 5206.07
+}
+
+2026-04-03 18:22:48,033 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Office-C"
+ts {
+  seconds: 1775240568
+  nanos: 33614000
+}
+door {
+}
+
+2026-04-03 18:22:50,033 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240570
+  nanos: 33825000
+}
+door {
+}
+
+2026-04-03 18:22:52,034 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240572
+  nanos: 34056000
+}
+gas {
+  co2_ppm: 34502.1406
+  lpg_presence: 1653
+}
+
+2026-04-03 18:22:54,034 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240574
+  nanos: 34281000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:22:56,034 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Office-C"
+ts {
+  seconds: 1775240576
+  nanos: 34504000
+}
+temperature {
+  value: 35.08
+}
+
+2026-04-03 18:22:58,034 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240578
+  nanos: 34724000
+}
+door {
+}
+
+2026-04-03 18:23:00,035 - INFO - [CONSOLE LOG] door reading for sim-door-01: device_id: "sim-door-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240580
+  nanos: 34949000
+}
+door {
+}
+
+2026-04-03 18:23:02,035 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240582
+  nanos: 35158000
+}
+alert {
+  active: true
+  severity: SEVERITY_CRITICAL
+}
+
+2026-04-03 18:23:04,035 - INFO - [CONSOLE LOG] gas reading for sim-gas-01: device_id: "sim-gas-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240584
+  nanos: 35382000
+}
+gas {
+  co2_ppm: 17734.4297
+  lpg_presence: 9097.09
+}
+
+2026-04-03 18:23:06,035 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240586
+  nanos: 35613000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:23:08,035 - INFO - [CONSOLE LOG] alert reading for sim-alert-01: device_id: "sim-alert-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240588
+  nanos: 35829000
+}
+alert {
+  active: true
+  severity: SEVERITY_INFO
+}
+
+2026-04-03 18:23:10,036 - INFO - [CONSOLE LOG] humidity reading for sim-humidity-01: device_id: "sim-humidity-01"
+location: "Factory-Floor-A"
+ts {
+  seconds: 1775240590
+  nanos: 36063000
+}
+humidity {
+  value: 57.57
+}
+
+2026-04-03 18:23:12,036 - INFO - [CONSOLE LOG] temperature reading for sim-temperature-01: device_id: "sim-temperature-01"
+location: "Warehouse-B"
+ts {
+  seconds: 1775240592
+  nanos: 36303000
+}
+temperature {
+  value: 296.07
+}
+

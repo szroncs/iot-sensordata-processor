@@ -22,4 +22,4 @@ protoc --proto_path=$PROTO_DIR \
        --go_opt=paths=source_relative \
        $PROTO_DIR/sensor.proto
 
-echo "✅ Compilation complete! Check the /gen directories in both services."
+echo "Compilation complete! Check the /gen directories in both services."

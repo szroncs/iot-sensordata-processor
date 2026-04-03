@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0csensor.proto\x12\x06iot.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb6\x02\n\rSensorReading\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x10\n\x08location\x18\x02 \x01(\t\x12&\n\x02ts\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x31\n\x0btemperature\x18\x04 \x01(\x0b\x32\x1a.iot.v1.TemperatureReadingH\x00\x12+\n\x08humidity\x18\x05 \x01(\x0b\x32\x17.iot.v1.HumidityReadingH\x00\x12!\n\x03gas\x18\x06 \x01(\x0b\x32\x12.iot.v1.GasReadingH\x00\x12#\n\x04\x64oor\x18\x07 \x01(\x0b\x32\x13.iot.v1.DoorReadingH\x00\x12%\n\x05\x61lert\x18\x08 \x01(\x0b\x32\x14.iot.v1.AlertReadingH\x00\x42\t\n\x07payload\"#\n\x12TemperatureReading\x12\r\n\x05value\x18\x01 \x01(\x02\" \n\x0fHumidityReading\x12\r\n\x05value\x18\x01 \x01(\x02\"3\n\nGasReading\x12\x0f\n\x07\x63o2_ppm\x18\x01 \x01(\x02\x12\x14\n\x0clpg_presence\x18\x02 \x01(\x02\"\x1e\n\x0b\x44oorReading\x12\x0f\n\x07is_open\x18\x01 \x01(\x08\"\xb5\x01\n\x0c\x41lertReading\x12\x0e\n\x06\x61\x63tive\x18\x01 \x01(\x08\x12/\n\x08severity\x18\x02 \x01(\x0e\x32\x1d.iot.v1.AlertReading.Severity\"d\n\x08Severity\x12\x18\n\x14SEVERITY_UNSPECIFIED\x10\x00\x12\x11\n\rSEVERITY_INFO\x10\x01\x12\x14\n\x10SEVERITY_WARNING\x10\x02\x12\x15\n\x11SEVERITY_CRITICAL\x10\x03\x42>Z<iot-sensordata-processor/s2-data-processor/gen/iot_pb;iot_pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0csensor.proto\x12\x06iot.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb6\x02\n\rSensorReading\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x10\n\x08location\x18\x02 \x01(\t\x12&\n\x02ts\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x31\n\x0btemperature\x18\x04 \x01(\x0b\x32\x1a.iot.v1.TemperatureReadingH\x00\x12+\n\x08humidity\x18\x05 \x01(\x0b\x32\x17.iot.v1.HumidityReadingH\x00\x12!\n\x03gas\x18\x06 \x01(\x0b\x32\x12.iot.v1.GasReadingH\x00\x12#\n\x04\x64oor\x18\x07 \x01(\x0b\x32\x13.iot.v1.DoorReadingH\x00\x12%\n\x05\x61lert\x18\x08 \x01(\x0b\x32\x14.iot.v1.AlertReadingH\x00\x42\t\n\x07payload\"#\n\x12TemperatureReading\x12\r\n\x05value\x18\x01 \x01(\x02\" \n\x0fHumidityReading\x12\r\n\x05value\x18\x01 \x01(\x02\"3\n\nGasReading\x12\x0f\n\x07\x63o2_ppm\x18\x01 \x01(\x02\x12\x14\n\x0clpg_presence\x18\x02 \x01(\x02\"\x1e\n\x0b\x44oorReading\x12\x0f\n\x07is_open\x18\x01 \x01(\x08\"\xb5\x01\n\x0c\x41lertReading\x12\x0e\n\x06\x61\x63tive\x18\x01 \x01(\x08\x12/\n\x08severity\x18\x02 \x01(\x0e\x32\x1d.iot.v1.AlertReading.Severity\"d\n\x08Severity\x12\x18\n\x14SEVERITY_UNSPECIFIED\x10\x00\x12\x11\n\rSEVERITY_INFO\x10\x01\x12\x14\n\x10SEVERITY_WARNING\x10\x02\x12\x15\n\x11SEVERITY_CRITICAL\x10\x03\x42\x39Z7iot-sensordata-processor/service-2-go/gen/iot_pb;iot_pbb\x06proto3')
 
 
 
@@ -71,7 +71,7 @@ _sym_db.RegisterMessage(AlertReading)
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'Z<iot-sensordata-processor/s2-data-processor/gen/iot_pb;iot_pb'
+  DESCRIPTOR._serialized_options = b'Z7iot-sensordata-processor/service-2-go/gen/iot_pb;iot_pb'
   _SENSORREADING._serialized_start=58
   _SENSORREADING._serialized_end=368
   _TEMPERATUREREADING._serialized_start=370
