@@ -1,0 +1,49 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+service-1-python/venv/
+service-1-python/gen/
+
+# Go
+bin/
+service-2-go/service-2-go
+service-2-go/gen/
+
+# Logs
+*.log
+go_logs.txt
+py_logs.txt
+
+# Infrastructure / Podman
+.podman-compose/
+
+# Protobuf (Generated files)
+**/gen/
+*pb2.py
+*pb2_grpc.py
+*.pb.go
