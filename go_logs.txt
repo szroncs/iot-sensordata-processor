@@ -1,0 +1,30 @@
+2026/04/03 21:49:51 INFO Initializing storage mechanism
+2026/04/03 21:49:51 INFO Building middleware pipeline
+2026/04/03 21:49:51 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:49:51 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:49:51 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:49:51 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:49:51 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:49:52 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:49:53 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:49:53 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:49:55 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:49:57 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:49:57 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:50:01 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:50:05 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:50:05 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:50:14 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:50:14 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:50:14 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:50:30 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:50:30 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:50:30 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:51:02 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:51:02 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:51:02 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:52:06 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:52:06 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883
+2026/04/03 21:52:06 INFO Subscribed successfully topic=iot-sensordata-processor/thesis/test
+2026/04/03 21:54:14 WARN Lost connection to MQTT broker error=EOF
+2026/04/03 21:54:14 INFO Connected to MQTT broker url=tcp://test.mosquitto.org:1883

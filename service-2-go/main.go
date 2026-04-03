@@ -4,7 +4,6 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -51,8 +50,8 @@ func main() {
 
 	opts.OnConnect = func(client mqtt.Client) {
 		slog.Info("Connected to MQTT broker", slog.String("url", brokerURL))
-		// Subscribe upon connecting
-		if token := client.Subscribe(topic, 1, nil); token.Wait() && token.Error() != nil {
+		// Subscribe upon connecting with QoS 2 to ensure we don't downgrade alerts
+		if token := client.Subscribe(topic, 2, nil); token.Wait() && token.Error() != nil {
 			slog.Error("Failed to subscribe to MQTT topic", slog.String("error", token.Error().Error()))
 			os.Exit(1)
 		}

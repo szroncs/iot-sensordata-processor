@@ -120,10 +120,17 @@ def main():
             
             payload_type = reading.WhichOneof("payload")
             
+            # Determine QoS based on thesis rules
+            qos = 1
+            if payload_type == "temperature":
+                qos = 0
+            elif payload_type == "alert":
+                qos = 2
+            
             if not DEBUG_CONSOLE_ONLY:
                 # Publish
-                client.publish(MQTT_TOPIC, payload_bytes)
-                logging.info(f"Published {payload_type} reading for {reading.device_id} to {MQTT_TOPIC} ({len(payload_bytes)} bytes)")
+                client.publish(MQTT_TOPIC, payload_bytes, qos=qos)
+                logging.info(f"Published {payload_type} reading for {reading.device_id} to {MQTT_TOPIC} ({len(payload_bytes)} bytes, QoS {qos})")
             else:
                 logging.info(f"[CONSOLE LOG] {payload_type} reading for {reading.device_id}: {reading}")
             
