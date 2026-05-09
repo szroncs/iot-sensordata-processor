@@ -1,0 +1,63 @@
+{
+  "type_counters": {
+    "temperature": 2,
+    "humidity": 1,
+    "gas": 1,
+    "door": 3,
+    "alert": 1
+  },
+  "sensors": [
+    {
+      "id": "sim-temperature-01",
+      "name": "Warehouse Temperature Sensor",
+      "type": "temperature",
+      "location": "Warehouse-B",
+      "sample_frequency_seconds": 10
+    },
+    {
+      "id": "sim-humidity-01",
+      "name": "Warehouse Humidity Sensor",
+      "type": "humidity",
+      "location": "Warehouse-B",
+      "sample_frequency_seconds": 15
+    },
+    {
+      "id": "sim-gas-01",
+      "name": "Office Gas Sensor",
+      "type": "gas",
+      "location": "Office-C",
+      "sample_frequency_seconds": 3
+    },
+    {
+      "id": "sim-door-01",
+      "name": "Factory Floor Door Sensor",
+      "type": "door",
+      "location": "Factory-Floor-A"
+    },
+    {
+      "id": "sim-alert-01",
+      "name": "Factory Floor Alert Sensor",
+      "type": "alert",
+      "location": "Factory-Floor-A"
+    },
+    {
+      "id": "sim-temperature-02",
+      "name": "Office-C Temperature",
+      "type": "temperature",
+      "location": "Office-C",
+      "sample_frequency_seconds": 10
+    },
+    {
+      "id": "sim-door-02",
+      "name": "Office-C Door Sensor",
+      "type": "door",
+      "location": "Office-C"
+    },
+    {
+      "id": "sim-door-03",
+      "name": "Warehouse-B Door Sensor",
+      "type": "door",
+      "location": "Warehouse-B"
+    }
+  ]
+}

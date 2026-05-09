@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mosquitto:
@@ -8,18 +8,43 @@ services:
     volumes:
       - ./infrastructure/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro,z
 
+  # ── Sensor configuration admin UI ─────────────────────────────────────────
+  # Serves the web interface for managing the sensor registry (sensors.json).
+  # Changes are held in memory until the user clicks Apply, which writes them
+  # to the shared config volume.  Restart service-1-python to pick them up.
+  sensor-admin:
+    build:
+      context: ./sensor-admin
+    ports:
+      - "8080:8080"
+    environment:
+      - SENSOR_CONFIG_PATH=/app/config/sensors.json
+      - ADMIN_HOST=0.0.0.0
+      - ADMIN_PORT=8080
+    volumes:
+      # Read-write: the admin UI is the sole writer of this file
+      - ./config:/app/config:z
+
+  # ── IoT sensor data simulator ─────────────────────────────────────────────
+  # Reads sensors.json on startup and publishes simulated telemetry over MQTT.
+  # Restart this service after applying changes in the sensor admin UI.
   service-1-python:
     build:
       context: ./service-1-python
     depends_on:
       - mosquitto
+      - sensor-admin
     environment:
       - MQTT_BROKER=mosquitto
       - MQTT_PORT=1883
       - MQTT_TOPIC=telemetry/sensors
-      - INTERVAL_SECONDS=2.0
       - DEBUG_CONSOLE_ONLY=false
+      - SENSOR_CONFIG_PATH=/app/config/sensors.json
+    volumes:
+      # Read-only: the simulator only ever reads the config file
+      - ./config:/app/config:ro,z
 
+  # ── High-performance data processing engine ───────────────────────────────
   service-2-go:
     build:
       context: ./service-2-go
@@ -36,6 +61,7 @@ services:
       - INFLUX_BUCKET_RAW=raw_data
       - INFLUX_BUCKET_INVALID=invalid_data
 
+  # ── Time-series database ──────────────────────────────────────────────────
   influxdb:
     image: docker.io/library/influxdb:2.0
     ports:
@@ -51,6 +77,7 @@ services:
       - influxdb-data:/var/lib/influxdb2
       - ./infrastructure/init-influx.sh:/docker-entrypoint-initdb.d/init.sh:ro,z
 
+  # ── Visualisation dashboard ───────────────────────────────────────────────
   grafana:
     image: docker.io/grafana/grafana:latest
     ports:
