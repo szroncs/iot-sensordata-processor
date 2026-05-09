@@ -12,11 +12,11 @@ func TestValidateTemperature(t *testing.T) {
 		value   float32
 		wantErr bool
 	}{
-		{"Valid low", -200.0, false},
-		{"Valid high", 850.0, false},
-		{"Valid mid", 25.0, false},
-		{"Invalid too low", -200.1, true},
-		{"Invalid too high", 850.1, true},
+		{"Valid low", 10.0, false},
+		{"Valid high", 28.0, false},
+		{"Valid mid", 20.0, false},
+		{"Invalid too low", 9.9, true},
+		{"Invalid too high", 28.1, true},
 	}
 
 	for _, tc := range tests {
@@ -40,11 +40,11 @@ func TestValidateHumidity(t *testing.T) {
 		value   float32
 		wantErr bool
 	}{
-		{"Valid low", 0.0, false},
-		{"Valid high", 100.0, false},
+		{"Valid low", 35.0, false},
+		{"Valid high", 65.0, false},
 		{"Valid mid", 50.0, false},
-		{"Invalid too low", -0.1, true},
-		{"Invalid too high", 100.1, true},
+		{"Invalid too low", 34.9, true},
+		{"Invalid too high", 65.1, true},
 	}
 
 	for _, tc := range tests {
@@ -70,9 +70,10 @@ func TestValidateGas(t *testing.T) {
 		wantErr bool
 	}{
 		{"Valid", 1000.0, 500.0, false},
-		{"Valid max", 50000.0, 10000.0, false}, // LPG doesn't have an upper bound in code, just CO2
-		{"Invalid CO2 too high", 50000.1, 500.0, true},
+		{"Valid max", 1800.0, 1100.0, false},
+		{"Invalid CO2 too high", 1800.1, 500.0, true},
 		{"Invalid CO2 negative", -1.0, 500.0, true},
+		{"Invalid LPG too high", 1000.0, 1100.1, true},
 		{"Invalid LPG negative", 1000.0, -1.0, true},
 	}
 

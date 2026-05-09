@@ -28,22 +28,28 @@ def get_current_timestamp():
 
 def simulate_temperature():
     reading = sensor_pb2.TemperatureReading()
-    # Industrial RTDs typical Range: -200 C to 850 C
-    reading.value = round(random.uniform(-200.0, 850.0), 2)
+    # Normal distribution centered around 20C with a stddev of 5C
+    val = random.gauss(20.0, 5.0)
+    # Clamp to physical RTD sensor limits (-200 to 850)
+    reading.value = round(max(-200.0, min(850.0, val)), 2)
     return reading
 
 def simulate_humidity():
     reading = sensor_pb2.HumidityReading()
-    # Industrial humidity typically covers 0 to 100% RH
-    reading.value = round(random.uniform(0.0, 100.0), 2)
+    # Normal distribution centered around 50% with a stddev of 10%
+    val = random.gauss(50.0, 10.0)
+    # Clamp to physical 0-100% RH limits
+    reading.value = round(max(0.0, min(100.0, val)), 2)
     return reading
 
 def simulate_gas():
     reading = sensor_pb2.GasReading()
-    # CO2 ppm range: 0-50,000 ppm
-    reading.co2_ppm = round(random.uniform(0.0, 50000.0), 2)
-    # LPG typically detects gas concentrations in the range of 200-10,000 ppm
-    reading.lpg_presence = round(random.uniform(200.0, 10000.0), 2)
+    # Normal distribution: CO2 (mean 1000, std 400), LPG (mean 600, std 300)
+    co2 = random.gauss(1000.0, 400.0)
+    lpg = random.gauss(600.0, 300.0)
+    # Clamp to physical limits
+    reading.co2_ppm = round(max(0.0, min(50000.0, co2)), 2)
+    reading.lpg_presence = round(max(0.0, min(10000.0, lpg)), 2)
     return reading
 
 def simulate_door():

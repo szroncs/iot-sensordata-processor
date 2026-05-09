@@ -27,7 +27,7 @@ class TestSensorSimulator(unittest.TestCase):
         self.assertIsInstance(reading, sensor_pb2.GasReading)
         self.assertGreaterEqual(reading.co2_ppm, 0.0)
         self.assertLessEqual(reading.co2_ppm, 50000.0)
-        self.assertGreaterEqual(reading.lpg_presence, 200.0)
+        self.assertGreaterEqual(reading.lpg_presence, 0.0)
         self.assertLessEqual(reading.lpg_presence, 10000.0)
 
     def test_simulate_alert(self):

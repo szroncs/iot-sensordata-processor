@@ -21,22 +21,21 @@ func Validate(reading *iot_pb.SensorReading) error {
 	switch v := payload.(type) {
 	case *iot_pb.SensorReading_Temperature:
 		temp := v.Temperature.GetValue()
-		if temp < -200.0 || temp > 850.0 {
+		if temp < 10.0 || temp > 28.0 {
 			return fmt.Errorf("temperature out of bounds: %.2f°C", temp)
 		}
 	case *iot_pb.SensorReading_Humidity:
 		hum := v.Humidity.GetValue()
-		if hum < 0.0 || hum > 100.0 {
+		if hum < 35.0 || hum > 65.0 {
 			return fmt.Errorf("humidity out of bounds: %.2f%%", hum)
 		}
 	case *iot_pb.SensorReading_Gas:
 		co2 := v.Gas.GetCo2Ppm()
 		lpg := v.Gas.GetLpgPresence()
-		if co2 < 0.0 || co2 > 50000.0 {
+		if co2 < 0.0 || co2 > 1800.0 {
 			return fmt.Errorf("CO2 out of bounds: %.2f ppm", co2)
 		}
-		if lpg < 0.0 {
-			// Usually can't be negative
+		if lpg < 0.0 || lpg > 1100.0 {
 			return fmt.Errorf("LPG out of bounds: %.2f ppm", lpg)
 		}
 	case *iot_pb.SensorReading_Door:
