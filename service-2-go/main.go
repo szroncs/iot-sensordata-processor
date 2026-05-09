@@ -29,11 +29,30 @@ func main() {
 	brokerURL := "tcp://" + broker + ":" + portStr
 
 	// 2. Initialize Pipeline & Storage
-	slog.Info("Initializing storage mechanism")
-	jsonStore := storage.NewJSONLoggerStorage()
+	influxURL := os.Getenv("INFLUX_URL")
+	if influxURL == "" {
+		influxURL = "http://localhost:8086"
+	}
+	influxToken := os.Getenv("INFLUX_TOKEN")
+	influxOrg := os.Getenv("INFLUX_ORG")
+	if influxOrg == "" {
+		influxOrg = "thesis_org"
+	}
+	influxValidBucket := os.Getenv("INFLUX_BUCKET_VALID")
+	if influxValidBucket == "" {
+		influxValidBucket = "valid_data"
+	}
+	influxInvalidBucket := os.Getenv("INFLUX_BUCKET_INVALID")
+	if influxInvalidBucket == "" {
+		influxInvalidBucket = "invalid_data"
+	}
+
+	slog.Info("Initializing InfluxDB storage mechanism", slog.String("url", influxURL))
+	influxStore := storage.NewInfluxStorage(influxURL, influxToken, influxOrg, influxValidBucket, influxInvalidBucket)
+	defer influxStore.Close()
 
 	slog.Info("Building middleware pipeline")
-	pipeline := middleware.NewPipeline(jsonStore)
+	pipeline := middleware.NewPipeline(influxStore)
 
 	// 3. Configure MQTT Client
 	opts := mqtt.NewClientOptions()
