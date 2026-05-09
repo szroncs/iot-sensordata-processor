@@ -38,9 +38,9 @@ func main() {
 	if influxOrg == "" {
 		influxOrg = "thesis_org"
 	}
-	influxValidBucket := os.Getenv("INFLUX_BUCKET_VALID")
-	if influxValidBucket == "" {
-		influxValidBucket = "valid_data"
+	influxRawBucket := os.Getenv("INFLUX_BUCKET_RAW")
+	if influxRawBucket == "" {
+		influxRawBucket = "raw_data"
 	}
 	influxInvalidBucket := os.Getenv("INFLUX_BUCKET_INVALID")
 	if influxInvalidBucket == "" {
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	slog.Info("Initializing InfluxDB storage mechanism", slog.String("url", influxURL))
-	influxStore := storage.NewInfluxStorage(influxURL, influxToken, influxOrg, influxValidBucket, influxInvalidBucket)
+	influxStore := storage.NewInfluxStorage(influxURL, influxToken, influxOrg, influxRawBucket, influxInvalidBucket)
 	defer influxStore.Close()
 
 	slog.Info("Building middleware pipeline")

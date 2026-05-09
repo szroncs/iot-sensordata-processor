@@ -97,7 +97,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"temperature\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n  |> group(columns: [\"location\"])\n  |> yield(name: \"temperature\")",
           "refId": "A"
         }
       ],
@@ -192,7 +192,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"humidity\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n  |> group(columns: [\"location\"])\n  |> yield(name: \"humidity\")",
           "refId": "A"
         }
       ],
@@ -287,7 +287,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"co2\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"co2\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"co2\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"co2\")\n  |> group(columns: [\"location\"])\n  |> yield(name: \"co2\")",
           "refId": "A"
         }
       ],
@@ -382,7 +382,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lpg\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lpg\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"lpg\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lpg\")\n  |> group(columns: [\"location\"])\n  |> yield(name: \"lpg\")",
           "refId": "A"
         }
       ],
@@ -549,7 +549,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"active\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"alert\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"alert\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"active\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"alert\")\n  |> yield(name: \"alert\")",
           "refId": "A"
         }
       ],
@@ -629,7 +629,7 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"is_open\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"door\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"door\")",
+          "query": "from(bucket: \"raw_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"is_open\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"door\")\n  |> yield(name: \"door\")",
           "refId": "A"
         }
       ],

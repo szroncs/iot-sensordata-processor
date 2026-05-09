@@ -33,7 +33,7 @@ services:
       - INFLUX_URL=http://influxdb:8086
       - INFLUX_TOKEN=my-super-secret-auth-token
       - INFLUX_ORG=thesis_org
-      - INFLUX_BUCKET_VALID=valid_data
+      - INFLUX_BUCKET_RAW=raw_data
       - INFLUX_BUCKET_INVALID=invalid_data
 
   influxdb:
@@ -45,7 +45,7 @@ services:
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
       - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword
       - DOCKER_INFLUXDB_INIT_ORG=thesis_org
-      - DOCKER_INFLUXDB_INIT_BUCKET=valid_data
+      - DOCKER_INFLUXDB_INIT_BUCKET=raw_data
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
     volumes:
       - influxdb-data:/var/lib/influxdb2

@@ -11,19 +11,19 @@ import (
 
 type InfluxStorage struct {
 	client          influxdb2.Client
-	writeAPIValid   api.WriteAPIBlocking
+	writeAPIRaw     api.WriteAPIBlocking
 	writeAPIInvalid api.WriteAPIBlocking
 }
 
-func NewInfluxStorage(url, token, org, validBucket, invalidBucket string) *InfluxStorage {
+func NewInfluxStorage(url, token, org, rawBucket, invalidBucket string) *InfluxStorage {
 	client := influxdb2.NewClient(url, token)
 
-	writeAPIValid := client.WriteAPIBlocking(org, validBucket)
+	writeAPIRaw := client.WriteAPIBlocking(org, rawBucket)
 	writeAPIInvalid := client.WriteAPIBlocking(org, invalidBucket)
 
 	return &InfluxStorage{
 		client:          client,
-		writeAPIValid:   writeAPIValid,
+		writeAPIRaw:     writeAPIRaw,
 		writeAPIInvalid: writeAPIInvalid,
 	}
 }
@@ -76,16 +76,20 @@ func (s *InfluxStorage) Save(reading *iot_pb.SensorReading, valid bool, validati
 		fields,
 		timestamp)
 
-	var err error
-	if valid {
-		err = s.writeAPIValid.WritePoint(context.Background(), p)
-	} else {
-		err = s.writeAPIInvalid.WritePoint(context.Background(), p)
+	// Always write raw telemetry
+	err := s.writeAPIRaw.WritePoint(context.Background(), p)
+	if err != nil {
+		slog.Error("Failed to write to raw InfluxDB bucket", slog.String("error", err.Error()))
+		return err
 	}
 
-	if err != nil {
-		slog.Error("Failed to write to InfluxDB", slog.String("error", err.Error()))
-		return err
+	// Additionally write to invalid bucket if invalid
+	if !valid {
+		err = s.writeAPIInvalid.WritePoint(context.Background(), p)
+		if err != nil {
+			slog.Error("Failed to write to invalid InfluxDB bucket", slog.String("error", err.Error()))
+			return err
+		}
 	}
 
 	return nil
