@@ -36,7 +36,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -48,7 +48,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "area"
             }
           },
           "mappings": [],
@@ -56,8 +56,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 28
               }
             ]
           }
@@ -89,11 +97,11 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> aggregateWindow(every: v.windowPeriod, fn: count, createEmpty: false)\n  |> yield(name: \"count\")",
+          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"temperature\")",
           "refId": "A"
         }
       ],
-      "title": "Valid Telemetry Flow",
+      "title": "Temperature (Min: 10, Max: 28)",
       "type": "timeseries"
     },
     {
@@ -123,7 +131,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -135,7 +143,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "area"
             }
           },
           "mappings": [],
@@ -145,6 +153,14 @@
               {
                 "color": "red",
                 "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 35
+              },
+              {
+                "color": "red",
+                "value": 65
               }
             ]
           }
@@ -176,11 +192,11 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> aggregateWindow(every: v.windowPeriod, fn: count, createEmpty: false)\n  |> yield(name: \"count\")",
+          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"humidity\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"humidity\")",
           "refId": "A"
         }
       ],
-      "title": "Invalid/Rejected Telemetry",
+      "title": "Humidity (Min: 35, Max: 65)",
       "type": "timeseries"
     },
     {
@@ -191,7 +207,290 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 1800
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"co2\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"co2\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"co2\")",
+          "refId": "A"
+        }
+      ],
+      "title": "CO2 (Min: 0, Max: 1800)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 1100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "valid = from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lpg\")\n\ninvalid = from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lpg\")\n\nunion(tables: [valid, invalid])\n  |> group(columns: [\"location\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"lpg\")",
+          "refId": "A"
+        }
+      ],
+      "title": "LPG (Min: 0, Max: 1100)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Count per Minute",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"invalid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"error\")\n  |> group(columns: [])\n  |> aggregateWindow(every: 1m, fn: count, createEmpty: false)\n  |> yield(name: \"invalid_count\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Invalid/Rejected Telemetry (Count per Minute)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__field.labels.location} / ${__field.labels.device_id}",
+          "color": {
             "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0,
+            "rowHeight": 0.9
           },
           "mappings": [
             {
@@ -199,12 +498,12 @@
                 "false": {
                   "color": "green",
                   "index": 1,
-                  "text": "FALSE"
+                  "text": "Normal"
                 },
                 "true": {
                   "color": "red",
                   "index": 0,
-                  "text": "TRUE"
+                  "text": "Alerting"
                 }
               },
               "type": "value"
@@ -224,24 +523,25 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
-        "y": 8
+        "y": 24
       },
-      "id": 4,
+      "id": 7,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "alignValue": "left",
+        "colWidth": 0.9,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "textMode": "auto"
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "targets": [
         {
@@ -249,12 +549,92 @@
             "type": "influxdb",
             "uid": "InfluxDB"
           },
-          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"alert\")\n  |> filter(fn: (r) => r[\"_field\"] == \"active\")\n  |> group(columns: [\"device_id\"])\n  |> last()",
+          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"active\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"alert\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"alert\")",
           "refId": "A"
         }
       ],
-      "title": "Alert Sensor States",
-      "type": "stat"
+      "title": "Alert Status History",
+      "type": "status-history"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__field.labels.location} / ${__field.labels.device_id}",
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0,
+            "rowHeight": 0.9
+          },
+          "mappings": [
+            {
+              "options": {
+                "false": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Closed"
+                },
+                "true": {
+                  "color": "yellow",
+                  "index": 0,
+                  "text": "Open"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 8,
+      "options": {
+        "alignValue": "left",
+        "colWidth": 0.9,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"valid_data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"sensor_telemetry\")\n  |> filter(fn: (r) => r[\"_field\"] == \"is_open\")\n  |> filter(fn: (r) => r[\"payload_type\"] == \"door\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"door\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Door Status History",
+      "type": "status-history"
     }
   ],
   "refresh": "5s",
@@ -272,5 +652,5 @@
   "timezone": "",
   "title": "IoT Telemetry Overview",
   "uid": "iot_overview",
-  "version": 1
+  "version": 2
 }

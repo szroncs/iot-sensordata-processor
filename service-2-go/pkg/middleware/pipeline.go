@@ -21,6 +21,7 @@ func NewPipeline(store storage.Storage) *Pipeline {
 
 // ProcessMessage is the main function spawned for every MQTT telemetry event
 func (p *Pipeline) ProcessMessage(payloadBytes []byte) {
+	slog.Info("Received message from MQTT", slog.Int("size", len(payloadBytes)))
 	// Step 1: Decode
 	reading := &iot_pb.SensorReading{}
 	if err := proto.Unmarshal(payloadBytes, reading); err != nil {
