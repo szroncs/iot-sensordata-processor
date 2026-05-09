@@ -1,6 +1,6 @@
 {
   "type_counters": {
-    "temperature": 2,
+    "temperature": 3,
     "humidity": 1,
     "gas": 1,
     "door": 3,
@@ -58,6 +58,13 @@
       "name": "Warehouse-B Door Sensor",
       "type": "door",
       "location": "Warehouse-B"
+    },
+    {
+      "id": "sim-temperature-03",
+      "name": "Office-C Temperature",
+      "type": "temperature",
+      "location": "Office-C",
+      "sample_frequency_seconds": 10
     }
   ]
 }

@@ -20,7 +20,6 @@ logging.basicConfig(
 MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_TOPIC = os.getenv("MQTT_TOPIC", "telemetry/sensors")
-DEBUG_CONSOLE_ONLY = os.getenv("DEBUG_CONSOLE_ONLY", "false").lower() == "true"
 SENSOR_CONFIG_PATH = os.getenv("SENSOR_CONFIG_PATH", "./config/sensors.json")
 
 # ── Physical sensor thresholds (hardware limits) ──────────────────────────────
@@ -131,15 +130,11 @@ def publish_reading(
         qos = 2
 
     payload_bytes = reading.SerializeToString()
-
-    if not DEBUG_CONSOLE_ONLY:
-        client.publish(MQTT_TOPIC, payload_bytes, qos=qos)
-        logging.info(
-            f"Published {payload_type} reading for {device_id} "
-            f"to {MQTT_TOPIC} ({len(payload_bytes)} bytes, QoS {qos})"
-        )
-    else:
-        logging.info(f"[CONSOLE LOG] {payload_type} reading for {device_id}: {reading}")
+    client.publish(MQTT_TOPIC, payload_bytes, qos=qos)
+    logging.info(
+        f"Published {payload_type} reading for {device_id} "
+        f"to {MQTT_TOPIC} ({len(payload_bytes)} bytes, QoS {qos})"
+    )
 
 
 # ── Per-sensor simulation state ───────────────────────────────────────────────
@@ -214,7 +209,7 @@ def tick_sensor(state: SensorState, now: float, client) -> None:
     elif sensor_type == "alert":
         # Transition: idle → active
         if not state.alert_is_active:
-            if random.random() < 0.005:
+            if random.random() < 0.0005:
                 state.alert_is_active = True
                 state.alert_severity = random.choice(
                     [
@@ -263,16 +258,13 @@ def main():
     client = mqtt.Client(client_id="python-simulator-01")
     client.on_connect = on_connect
 
-    if not DEBUG_CONSOLE_ONLY:
-        logging.info(f"Connecting to MQTT broker {MQTT_BROKER}:{MQTT_PORT}...")
-        try:
-            client.connect(MQTT_BROKER, MQTT_PORT, 60)
-        except Exception as e:
-            logging.error(f"Failed to connect to MQTT broker: {e}")
-            sys.exit(1)
-        client.loop_start()
-    else:
-        logging.info("DEBUG_CONSOLE_ONLY mode — bypassing MQTT connection.")
+    logging.info(f"Connecting to MQTT broker {MQTT_BROKER}:{MQTT_PORT}...")
+    try:
+        client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    except Exception as e:
+        logging.error(f"Failed to connect to MQTT broker: {e}")
+        sys.exit(1)
+    client.loop_start()
 
     try:
         while True:
@@ -283,10 +275,9 @@ def main():
     except KeyboardInterrupt:
         logging.info("Simulation stopped by user.")
     finally:
-        if not DEBUG_CONSOLE_ONLY:
-            client.loop_stop()
-            client.disconnect()
-            logging.info("Disconnected from MQTT broker.")
+        client.loop_stop()
+        client.disconnect()
+        logging.info("Disconnected from MQTT broker.")
 
 
 if __name__ == "__main__":
