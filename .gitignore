@@ -47,3 +47,6 @@ py_logs.txt
 *pb2.py
 *pb2_grpc.py
 *.pb.go
+
+#LLM
+prompt.md
