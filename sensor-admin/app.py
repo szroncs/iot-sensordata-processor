@@ -9,7 +9,6 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# ── Environment configuration ─────────────────────────────────────────────────
 CONFIG_PATH = os.getenv("SENSOR_CONFIG_PATH", "./config/sensors.json")
 ADMIN_HOST = os.getenv("ADMIN_HOST", "0.0.0.0")
 ADMIN_PORT = int(os.getenv("ADMIN_PORT", 8080))
@@ -21,17 +20,8 @@ TEMPLATE_PATH.insert(
 
 app = Bottle()
 
-# ── Sensor type catalogue ─────────────────────────────────────────────────────
-# Each entry defines what the admin UI shows and how the form behaves.
-#
-# "thresholds" = physical hardware limits (shown in the admin UI as read-only info).
-#                These are what service-1-python uses to clamp simulated values.
-#
-# "behavior"   = human-readable description for door/alert types whose publish
-#                timing is hardcoded and not user-configurable.
-#
-# The operational validation bounds ("sensor limits") live in service-2-go and
-# are referenced in Grafana dashboards — they are intentionally absent here.
+# Sensor types with their physical limits and form behaviour.
+# Operational validation limits (used by service-2-go) are intentionally not defined here.
 SENSOR_TYPES = {
     "temperature": {
         "label": "Temperature",
@@ -70,14 +60,9 @@ SENSOR_TYPES = {
     },
 }
 
-# ── In-memory working state ───────────────────────────────────────────────────
-# Loaded once at startup.  All CRUD operations mutate this dict.
-# Only written to disk when the user clicks Apply.
+# In-memory working state — loaded at startup, mutated by CRUD, flushed to disk on Apply.
 _config: dict = {}
 _dirty: bool = False  # True when in-memory state differs from the saved file
-
-
-# ── Config I/O ────────────────────────────────────────────────────────────────
 
 
 def _load_config() -> None:
@@ -91,7 +76,7 @@ def _load_config() -> None:
 
 
 def _save_config() -> None:
-    """Atomically write _config to disk using a temp-file + os.replace pattern."""
+    """Write the in-memory config to disk, using a temp file to avoid partial writes."""
     global _dirty
     config_dir = os.path.dirname(CONFIG_PATH)
     if config_dir:
@@ -104,15 +89,8 @@ def _save_config() -> None:
     logging.info(f"Config saved to {CONFIG_PATH}")
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
-
-
 def generate_sensor_id(sensor_type: str) -> str:
-    """
-    Increment the per-type counter and return a new slug ID.
-    The counter is persisted in sensors.json so IDs are never reused,
-    even after a sensor of that type is deleted.
-    """
+    """Return the next slug ID for a sensor type, e.g. sim-temperature-03."""
     counters = _config.setdefault("type_counters", {})
     counters[sensor_type] = counters.get(sensor_type, 0) + 1
     return f"sim-{sensor_type}-{counters[sensor_type]:02d}"
@@ -126,15 +104,7 @@ def _find_sensor(sensor_id: str) -> dict | None:
 
 
 def _validate_form(form: dict, is_edit: bool = False) -> tuple:
-    """
-    Validate incoming form data.
-    Returns (errors: list[str], parsed: dict).
-
-    On create (is_edit=False): 'type' is validated and included in parsed.
-    On edit   (is_edit=True):  'type' must be pre-injected from the existing
-                                sensor; it is used only to decide whether a
-                                frequency value is required.
-    """
+    """Validate form data. Returns (errors, parsed). On edit, inject sensor type before calling."""
     errors = []
     parsed = {}
 
@@ -167,9 +137,6 @@ def _validate_form(form: dict, is_edit: bool = False) -> tuple:
     parsed["name"] = name
     parsed["location"] = location
     return errors, parsed
-
-
-# ── Routes ────────────────────────────────────────────────────────────────────
 
 
 @app.route("/")
@@ -298,8 +265,6 @@ def apply_config():
         _save_config()
     redirect("/?saved=1")
 
-
-# ── Startup ───────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     _load_config()

@@ -16,7 +16,7 @@ func main() {
 	cfg := LoadConfig()
 	brokerURL := "tcp://" + cfg.MQTTBroker + ":" + cfg.MQTTPort
 
-	// 1. Initialize Storage & Pipeline
+	// Initialize Storage & Pipeline
 	slog.Info("Initializing InfluxDB storage", slog.String("url", cfg.InfluxURL))
 	influxStore := storage.NewInfluxStorage(
 		cfg.InfluxURL,
@@ -27,24 +27,23 @@ func main() {
 	)
 	defer influxStore.Close()
 
-	slog.Info("Building middleware pipeline")
+	slog.Info("Initializing middleware pipeline")
 	pipeline := middleware.NewPipeline(influxStore)
 
-	// 2. Configure MQTT Client
+	// Configure MQTT Client --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#ClientOptions
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(brokerURL)
 	opts.SetClientID("go-processor-01")
 	opts.SetCleanSession(true)
 
 	opts.SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
-		// Offload processing to a dedicated Goroutine (Fan-Out parallelism)
-		// ensuring the MQTT loop is never blocked!
+		// Handle each message in its own goroutine so the MQTT loop is never blocked --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#ClientOptions.SetDefaultPublishHandler
 		go pipeline.ProcessMessage(msg.Payload())
 	})
 
 	opts.OnConnect = func(client mqtt.Client) {
 		slog.Info("Connected to MQTT broker", slog.String("url", brokerURL))
-		// Subscribe upon connecting with QoS 2 to ensure we don't downgrade alerts
+		// QoS 2 on subscribe
 		if token := client.Subscribe(cfg.MQTTTopic, 2, nil); token.Wait() && token.Error() != nil {
 			slog.Error("Failed to subscribe to MQTT topic", slog.String("error", token.Error().Error()))
 			os.Exit(1)
@@ -56,15 +55,15 @@ func main() {
 		slog.Warn("Lost connection to MQTT broker", slog.String("error", err.Error()))
 	}
 
-	// 3. Start Client
+	// https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#NewClient
 	client := mqtt.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		slog.Error("Failed to connect to MQTT broker initially", slog.String("error", token.Error().Error()))
-		// Letting it crash is idiomatic — the container orchestrator will restart it
+		// crash and let Podman restart
 		os.Exit(1)
 	}
 
-	// 4. Wait for termination signal
+	// Wait for termination signal from channel
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	<-sigChan

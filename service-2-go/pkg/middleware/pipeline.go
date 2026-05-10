@@ -19,20 +19,18 @@ func NewPipeline(store storage.Storage) *Pipeline {
 	}
 }
 
-// ProcessMessage is the main function spawned for every MQTT telemetry event
+// ProcessMessage handles one MQTT payload (decode, validate, save)
 func (p *Pipeline) ProcessMessage(payloadBytes []byte) {
 	slog.Info("Received message from MQTT", slog.Int("size", len(payloadBytes)))
-	// Step 1: Decode
+
 	reading := &iot_pb.SensorReading{}
 	if err := proto.Unmarshal(payloadBytes, reading); err != nil {
 		slog.Error("Failed to decode Protobuf payload", slog.String("error", err.Error()))
 		return
 	}
 
-	// Step 2: Validate
 	err := Validate(reading)
 
-	// Step 3: Persist results (including errors so Grafana can visualize them)
 	if err != nil {
 		p.store.Save(reading, false, err)
 	} else {

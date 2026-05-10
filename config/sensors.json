@@ -12,21 +12,21 @@
       "name": "Warehouse Temperature Sensor",
       "type": "temperature",
       "location": "Warehouse-B",
-      "sample_frequency_seconds": 10
+      "sample_frequency_seconds": 1
     },
     {
       "id": "sim-humidity-01",
       "name": "Warehouse Humidity Sensor",
       "type": "humidity",
       "location": "Warehouse-B",
-      "sample_frequency_seconds": 15
+      "sample_frequency_seconds": 1
     },
     {
       "id": "sim-gas-01",
       "name": "Office Gas Sensor",
       "type": "gas",
       "location": "Office-C",
-      "sample_frequency_seconds": 3
+      "sample_frequency_seconds": 1
     },
     {
       "id": "sim-door-01",
@@ -45,7 +45,7 @@
       "name": "Office-C Temperature",
       "type": "temperature",
       "location": "Office-C",
-      "sample_frequency_seconds": 10
+      "sample_frequency_seconds": 1
     },
     {
       "id": "sim-door-02",
@@ -64,7 +64,7 @@
       "name": "Office-C Temperature",
       "type": "temperature",
       "location": "Office-C",
-      "sample_frequency_seconds": 10
+      "sample_frequency_seconds": 1
     }
   ]
 }

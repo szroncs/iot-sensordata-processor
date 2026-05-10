@@ -1,30 +1,49 @@
 # IoT telemetry optimization: binary serialization and middleware-based sensor data validation
 
-Draft project structure
+## Project structure
 
-iot-data-pipeline/
-├── proto/
-│   └── sensor.proto           # The "Contract"
-├── service-1-python/
-│   ├── gen/                   # Generated Protobuf code (Python)
-│   ├── main.py                # Mock data logic
-│   ├── requirements.txt
-│   └── Dockerfile
-├── service-2-go/
-│   ├── gen/                   # Generated Protobuf code (Go)
-│   ├── pkg/
-│   │   ├── middleware/        # Logic for log/validate/persist
-│   │   └── influx/            # InfluxDB client wrapper
-│   ├── main.go                # MQTT Subscriber & Pipeline setup
-│   ├── go.mod
-│   └── Dockerfile
-├── infrastructure/
-│   ├── mosquitto.conf         # MQTT broker config
-│   └── grafana/               # Pre-configured dashboard JSONs
-├── scripts/
-│   └── generate_protos.sh     # Script to run protoc for both langs
-├── podman-compose.yaml        # Main orchestration file
-└── README.md
+```text
+.
+├── config
+│   └── sensors.json
+├── generate_protos.sh
+├── infrastructure
+│   ├── grafana
+│   │   ├── dashboards
+│   │   └── provisioning
+│   ├── init-influx.sh
+│   └── mosquitto.conf
+├── PLAN.md
+├── podman-compose.yaml
+├── proto
+│   ├── buf.yaml
+│   └── sensor.proto
+├── README.md
+├── sensor-admin
+│   ├── app.py
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── tests
+│   │   ├── __init__.py
+│   │   └── test_admin.py
+│   └── views
+│       ├── index.tpl
+│       └── sensor_form.tpl
+├── service-1-python
+│   ├── Dockerfile
+│   ├── main.py
+│   ├── requirements.txt
+│   └── test_main.py
+└── service-2-go
+    ├── config.go
+    ├── Dockerfile
+    ├── go.mod
+    ├── go.sum
+    ├── main.go
+    └── pkg
+        ├── middleware
+        └── storage
+```
 
 ## Tech stack
 
@@ -51,54 +70,31 @@ Validation per sensor type:
 - Alert: Info, Warning, Critical
 
 ### ProtoBuf
-Data serialization and data structure definition.
 
 
 ### MQTT - mosquitto
-Currently, there is no `mosquitto.conf` implemented. An external or default Mosquitto instance needs to be used for the current state of the application.
+
 
 ### InfluxDB
-Currently not fully implemented. As of now, `service-2-go` relies on `pkg/storage/logger.go` instead of a fully implemented `pkg/influx` driver.
+
 
 ### Grafana
-Dashboards are currently pending implementation.
+
 
 ### Podman
-The `podman-compose.yaml` file is pending creation. You will need to build and run the provided `Dockerfile`s manually for now.
 
 
-## Current State vs Draft Structure
-There are some discrepancies between the planned Draft structure and the actual implementation:
-- `generate_protos.sh` is located in the root directory rather than in the `scripts/` directory.
-- The `infrastructure/` directory is currently created as `infrastruture/` and is empty.
-- `service-2-go/pkg/influx/` is not yet present; there is a `pkg/storage/logger.go` instead which currently logs data to the console.
-- The project is still missing full InfluxDB and Grafana integration.
-- To generate protobufs: run `./generate_protos.sh` from the root.
-- To run Python mock data: `cd service-1-python && source venv/bin/activate && python main.py`
-- To run Go backend: `cd service-2-go && go run main.go`
+# man:
 
-
-
-ToDo:
-
-1. Bring up the network using the compose file we generated earlier:
-```sh
+1. Bring up the whole pod using the podman-compose.yaml:
+\`\`\`sh
 podman-compose up --build -d
-```
-2. You can then attach to the Go subscriber logs and watch the messages come in and be processed by the middleware:
-```sh
+\`\`\`
+2. Go subscriber logs:
+\`\`\`sh
 podman-compose logs -f service-2-go
-```
+\`\`\`
 3. To watch the Python backend serialize the data into Protocol Buffers and publish them with the assigned QoS flags, tail its logs:
-```sh
+\`\`\`sh
 podman-compose logs -f service-1-python
-```
-
-If you ever want to test the Python payload generation logic *without* an MQTT broker running, you can also run the Python service using its built-in bypass flag:
-```sh
-cd service-1-python
-source venv/bin/activate
-DEBUG_CONSOLE_ONLY=true python main.py
-```
-
-Let me know if you want to proceed with storing the data into InfluxDB next (which is still a mock method in `pkg/storage/logger.go`)!
+\`\`\`

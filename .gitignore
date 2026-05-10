@@ -3,7 +3,6 @@
 Thumbs.db
 
 # IDEs
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -24,15 +23,12 @@ pip-delete-this-directory.txt
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
 .hypothesis/
-service-1-python/venv/
-service-1-python/gen/
 
 # Go
 bin/
 service-2-go/service-2-go
-service-2-go/gen/
 
 # Logs
 *.log
@@ -45,8 +41,6 @@ py_logs.txt
 # Protobuf (Generated files)
 **/gen/
 *pb2.py
-*pb2_grpc.py
-*.pb.go
 
-#LLM
+# LLM
 prompt.md

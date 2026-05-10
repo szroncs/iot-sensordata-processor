@@ -8,7 +8,7 @@ datasources:
     isDefault: true
     jsonData:
       version: Flux
-      organization: thesis_org
+      organization: T4PIJ6_org
       defaultBucket: valid_data
       tlsSkipVerify: true
     secureJsonData:

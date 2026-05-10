@@ -7,7 +7,7 @@ import time
 
 import paho.mqtt.client as mqtt
 
-# Add the 'gen/iot_pb' directory to the Python path to import the generated protobuf classes
+# Add the gen/iot_pb directory to the Python path for the generated protobuf classes
 sys.path.append(os.path.join(os.path.dirname(__file__), "gen", "iot_pb"))
 import sensor_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -16,15 +16,13 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# ── Environment configuration ─────────────────────────────────────────────────
 MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_TOPIC = os.getenv("MQTT_TOPIC", "telemetry/sensors")
 SENSOR_CONFIG_PATH = os.getenv("SENSOR_CONFIG_PATH", "./config/sensors.json")
 
-# ── Physical sensor thresholds (hardware limits) ──────────────────────────────
-# These constrain the simulated values to what the physical hardware can output.
-# They are NOT the operational validation bounds used by service-2-go.
+# Physical sensor thresholds — hardware limits used to clamp simulated values.
+# These are NOT the operational validation bounds used by service-2-go.
 SENSOR_THRESHOLDS = {
     "temperature": {"min": -200.0, "max": 850.0},
     "humidity": {"min": 0.0, "max": 100.0},
@@ -34,15 +32,9 @@ SENSOR_THRESHOLDS = {
     },
 }
 
-# ── Config loading ────────────────────────────────────────────────────────────
-
 
 def load_sensor_config(path: str) -> list:
-    """
-    Load and return the sensors list from sensors.json.
-    Exits the process on missing file or malformed JSON so the container
-    restarts with a clear error rather than silently doing nothing.
-    """
+    """Load sensors from sensors.json. Exits on missing file or bad JSON."""
     try:
         with open(path, "r") as f:
             data = json.load(f)
@@ -55,9 +47,6 @@ def load_sensor_config(path: str) -> list:
     except json.JSONDecodeError as e:
         logging.error(f"Invalid JSON in sensor config file ({path}): {e}")
         sys.exit(1)
-
-
-# ── Simulation functions ──────────────────────────────────────────────────────
 
 
 def get_current_timestamp():
@@ -105,9 +94,6 @@ def simulate_alert(is_active: bool, severity) -> sensor_pb2.AlertReading:
     return reading
 
 
-# ── Publishing ────────────────────────────────────────────────────────────────
-
-
 def publish_reading(
     client, payload_type: str, device_id: str, location: str, reading_data, qos: int = 1
 ) -> None:
@@ -137,14 +123,8 @@ def publish_reading(
     )
 
 
-# ── Per-sensor simulation state ───────────────────────────────────────────────
-
-
 class SensorState:
-    """
-    Tracks all runtime mutable state for one sensor.
-    Each sensor loaded from sensors.json gets its own SensorState instance.
-    """
+    """Runtime state for one sensor loaded from sensors.json."""
 
     def __init__(self, sensor_config: dict):
         self.config = sensor_config
@@ -161,11 +141,7 @@ class SensorState:
 
 
 def tick_sensor(state: SensorState, now: float, client) -> None:
-    """
-    Process one 0.1-second simulation tick for a single sensor.
-    Publishes a reading when the sensor's interval has elapsed,
-    or immediately on a door state change.
-    """
+    """Run one simulation tick for a sensor, publishing if the interval has elapsed."""
     cfg = state.config
     sensor_type = cfg["type"]
     device_id = cfg["id"]
@@ -194,7 +170,7 @@ def tick_sensor(state: SensorState, now: float, client) -> None:
             state.last_publish = now
 
     elif sensor_type == "door":
-        # ~1% chance per 0.1s tick → average ~10s between state changes
+        # ~1% chance per 0.1s tick -> average ~10s between state changes
         door_changed = False
         if random.random() < 0.01:
             state.door_is_open = not state.door_is_open
@@ -207,8 +183,8 @@ def tick_sensor(state: SensorState, now: float, client) -> None:
             state.last_publish = now
 
     elif sensor_type == "alert":
-        # Transition: idle → active
         if not state.alert_is_active:
+            # 0.05% chance per tick -> ~200s average between alerts
             if random.random() < 0.0005:
                 state.alert_is_active = True
                 state.alert_severity = random.choice(
@@ -220,11 +196,11 @@ def tick_sensor(state: SensorState, now: float, client) -> None:
                 )
                 state.alert_start_time = now
         else:
-            # Transition: active → resolved (earliest after 5 s)
+            # Resolve after at least 5s, then 5% chance per tick
             if (now - state.alert_start_time) > 5 and random.random() < 0.05:
                 state.alert_is_active = False
 
-        # Publish interval: 1 s when alerting, 60 s when idle
+        # 1s interval while alerting, 60s heartbeat when idle
         alert_interval = 1 if state.alert_is_active else 60
         if now - state.last_publish >= alert_interval:
             publish_reading(
@@ -237,17 +213,11 @@ def tick_sensor(state: SensorState, now: float, client) -> None:
             state.last_publish = now
 
 
-# ── MQTT callbacks ────────────────────────────────────────────────────────────
-
-
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         logging.info(f"Connected to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}")
     else:
         logging.error(f"Failed to connect to MQTT broker, return code: {rc}")
-
-
-# ── Entry point ───────────────────────────────────────────────────────────────
 
 
 def main():

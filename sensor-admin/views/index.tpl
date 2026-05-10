@@ -19,7 +19,7 @@
 
 <div class="container pb-5" style="max-width: 960px;">
 
-  <!-- ── Status banners ───────────────────────────────────────────────────── -->
+  <!-- Status banners -->
   % if saved:
   <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
     <span>&#9989;</span>
@@ -42,7 +42,7 @@
   </div>
   % end
 
-  <!-- ── Header row ────────────────────────────────────────────────────────── -->
+  <!-- Header row -->
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="h5 mb-0 text-secondary">
       Configured Sensors
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <!-- ── Sensor table ──────────────────────────────────────────────────────── -->
+  <!-- Sensor table -->
   <div class="card shadow-sm">
     % if sensors:
     <div class="table-responsive">
@@ -117,7 +117,7 @@
     % end
   </div>
 
-  <!-- ── Legend ──────────────────────────────────────────────────────────────── -->
+  <!-- Legend -->
   <div class="mt-4 text-muted small">
     <strong>Note:</strong>
     Changes are held in memory until you click <em>Apply Configuration</em>.

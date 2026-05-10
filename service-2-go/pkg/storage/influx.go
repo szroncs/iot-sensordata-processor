@@ -4,11 +4,14 @@ import (
 	"context"
 	"log/slog"
 
+	"iot-sensordata-processor/service-2-go/gen/iot_pb"
+
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
-	"iot-sensordata-processor/service-2-go/gen/iot_pb"
 )
 
+// using the WriteAPIBlocking as described in : https://pkg.go.dev/github.com/influxdata/influxdb-client-go/v2/api#WriteAPIBlocking
+// for synchronous calls (for now it's easier to implement)
 type InfluxStorage struct {
 	client          influxdb2.Client
 	writeAPIRaw     api.WriteAPIBlocking
@@ -31,7 +34,7 @@ func NewInfluxStorage(url, token, org, rawBucket, invalidBucket string) *InfluxS
 func (s *InfluxStorage) Save(reading *iot_pb.SensorReading, valid bool, validationErr error) error {
 	deviceID := reading.GetDeviceId()
 	location := reading.GetLocation()
-	
+
 	// Convert Google Protobuf Timestamp to Go Time
 	timestamp := reading.GetTs().AsTime()
 
@@ -76,14 +79,14 @@ func (s *InfluxStorage) Save(reading *iot_pb.SensorReading, valid bool, validati
 		fields,
 		timestamp)
 
-	// Always write raw telemetry
+	// writes raw telemetry
 	err := s.writeAPIRaw.WritePoint(context.Background(), p)
 	if err != nil {
 		slog.Error("Failed to write to raw InfluxDB bucket", slog.String("error", err.Error()))
 		return err
 	}
 
-	// Additionally write to invalid bucket if invalid
+	// if validation fails writes to invalid bucket
 	if !valid {
 		err = s.writeAPIInvalid.WritePoint(context.Background(), p)
 		if err != nil {

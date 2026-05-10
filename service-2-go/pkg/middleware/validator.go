@@ -7,7 +7,7 @@ import (
 	"iot-sensordata-processor/service-2-go/gen/iot_pb"
 )
 
-// Validate checks the sensor reading against predefined physical & industrial limits.
+// checks the sensor value against fix limits
 func Validate(reading *iot_pb.SensorReading) error {
 	if reading == nil {
 		return errors.New("nil sensor reading")
@@ -39,9 +39,9 @@ func Validate(reading *iot_pb.SensorReading) error {
 			return fmt.Errorf("LPG out of bounds: %.2f ppm", lpg)
 		}
 	case *iot_pb.SensorReading_Door:
-		// Booleans are always valid
+		// both TRUE and FALSE are valid
 	case *iot_pb.SensorReading_Alert:
-		// Alerts are logic-driven, usually valid
+
 	default:
 		return fmt.Errorf("unknown payload type")
 	}

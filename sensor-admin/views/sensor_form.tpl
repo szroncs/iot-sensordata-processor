@@ -40,7 +40,7 @@
     </div>
     <div class="card-body">
 
-      <!-- ── Validation errors ─────────────────────────────────────────────── -->
+      <!-- Validation errors -->
       % if errors:
       <div class="alert alert-danger">
         <ul class="mb-0 ps-3">
@@ -168,7 +168,7 @@
   </div>
 </div>
 
-<!-- Pass the type catalogue to JavaScript for dynamic UI updates -->
+<!-- Pass sensor type definitions to JS for dynamic form behaviour -->
 <script>
 const SENSOR_TYPES = {{!json.dumps(sensor_types)}};
 
