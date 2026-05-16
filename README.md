@@ -1,100 +1,118 @@
 # IoT telemetry optimization: binary serialization and middleware-based sensor data validation
 
-## Project structure
+A full-stack IoT data processing pipeline featuring binary serialization (Protocol Buffers), real-time validation, and automated visualization.
+
+## Architecture
+
+1.  **sensor-admin**: A web-based management interface used to define and configure sensors in `sensors.json`.
+2.  **service-1-python**: A sensor simulator that reads the configuration, generates mock telemetry, serializes it using **Protobuf**, and publishes it to **MQTT**.
+3.  **MQTT (Mosquitto)**: Acts as the message broker for asynchronous communication.
+4.  **service-2-go**: A high-performance subscriber that validates incoming Protobuf messages using a **middleware pipeline** and stores them in **InfluxDB**.
+5.  **InfluxDB**: Time-series database storing both valid (raw) and invalid telemetry.
+6.  **Grafana**: Visualization platform pre-configured with dashboards to monitor the sensor data.
+
+---
+
+## Project Structure
 
 ```text
 .
 ├── config
-│   └── sensors.json
-├── generate_protos.sh
+│   └── sensors.json             # Shared sensor configuration
+├── generate_protos.sh           # Script to compile .proto files
 ├── infrastructure
-│   ├── grafana
-│   │   ├── dashboards
-│   │   └── provisioning
-│   ├── init-influx.sh
-│   └── mosquitto.conf
-├── PLAN.md
-├── podman-compose.yaml
+│   ├── grafana                  # Provisioning and dashboards
+│   ├── init-influx.sh           # InfluxDB initialization script
+│   └── mosquitto.conf           # MQTT broker configuration
+├── podman-compose.yaml          # Container orchestration
 ├── proto
 │   ├── buf.yaml
-│   └── sensor.proto
-├── README.md
-├── sensor-admin
-│   ├── app.py
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── tests
-│   │   ├── __init__.py
-│   │   └── test_admin.py
-│   └── views
-│       ├── index.tpl
-│       └── sensor_form.tpl
-├── service-1-python
-│   ├── Dockerfile
-│   ├── main.py
-│   ├── requirements.txt
-│   └── test_main.py
-└── service-2-go
-    ├── config.go
-    ├── Dockerfile
-    ├── go.mod
-    ├── go.sum
-    ├── main.go
-    └── pkg
-        ├── middleware
-        └── storage
+│   └── sensor.proto             # Protobuf definitions
+├── sensor-admin                 # Python (Bottle) management UI
+├── service-1-python             # Python sensor simulator
+└── service-2-go                 # Go telemetry processor
 ```
 
-## Tech stack
+---
 
-### Python
-Generate mock sensor data and publish to MQTT broker.
+## Tech Stack
 
-Sensor types:
-- Temperature (Industrial RTD Range: -200 C to 850 C) --> MQTT QoS 0
-- Humidity (Industrial humidity typically covers 0 to 100% RH) --> MQTT QoS 1
-- CO2 (ppm range: 0-50,000 ppm) --> MQTT QoS 1
-- LPG (typically detects gas concentrations in the range of 200-10,000 ppm) --> MQTT QoS 1
-- Door (Open/Closed) --> MQTT QoS 1
-- Alert (Info, Warning, Critical) --> MQTT QoS 2
+-   **Languages**: Python 3.11+, Go 1.22+
+-   **Serialization**: Protocol Buffers (proto3)
+-   **Messaging**: MQTT (QoS 0, 1, and 2 supported)
+-   **Storage**: InfluxDB 2.0
+-   **Visualization**: Grafana
+-   **Infrastructure**: Podman / Docker Compose
 
-### Go
-Subscribe to MQTT broker, validate the sensor data, and store it in InfluxDB. Use middleware to validate the sensor data. Use gorutine to handle sensor data parallelly.
+---
 
-Validation per sensor type:
-- Temperature: min -2 C to max 82 C
-- Humidity: min 15% to max 73% RH
-- CO2: min 0 ppm to max 2000 ppm
-- LPG: max 800 ppm
-- Door: Open/Closed
-- Alert: Info, Warning, Critical
+## Validation Rules (service-2-go)
 
-### ProtoBuf
+Telemetery is validated against these operational limits. Data outside these ranges is stored in a separate `invalid_data` bucket.
 
+| Sensor Type | Operational Range |
+| :--- | :--- |
+| **Temperature** | 10.0°C to 28.0°C |
+| **Humidity** | 35.0% to 65.0% RH |
+| **CO2** | 0 to 1800 ppm |
+| **LPG** | 0 to 1100 ppm |
+| **Door** | Boolean (Open/Closed) |
+| **Alert** | Severity levels: INFO, WARNING, CRITICAL |
 
-### MQTT - mosquitto
+---
 
+## Getting Started
 
-### InfluxDB
+### 1. Build and Run the Stack
 
+Bring up all services (Mosquitto, InfluxDB, Grafana, Admin UI, Simulator, and Processor):
 
-### Grafana
-
-
-### Podman
-
-
-# man:
-
-1. Bring up the whole pod using the podman-compose.yaml:
-\`\`\`sh
+```bash
 podman-compose up --build -d
-\`\`\`
-2. Go subscriber logs:
-\`\`\`sh
-podman-compose logs -f service-2-go
-\`\`\`
-3. To watch the Python backend serialize the data into Protocol Buffers and publish them with the assigned QoS flags, tail its logs:
-\`\`\`sh
-podman-compose logs -f service-1-python
-\`\`\`
+```
+
+### 2. Access Interfaces
+
+-   **Sensor Admin UI**: [http://localhost:8080](http://localhost:8080)
+    -   Use this to add, edit, or delete sensors. Click "Apply" to save changes to the shared config.
+-   **Grafana Dashboards**: [http://localhost:3000](http://localhost:3000)
+    -   Anonymous access is enabled. Go to "Dashboards" -> "Sensor Telemetry" to view real-time data.
+
+---
+
+## Development
+
+### Protobuf Compilation
+
+If you modify `proto/sensor.proto`, regenerate the Python and Go bindings:
+
+```bash
+./generate_protos.sh
+```
+
+### Running Tests
+
+#### Python (Admin & Simulator)
+```bash
+# Admin tests
+cd sensor-admin && python3 -m unittest discover tests
+# Simulator tests
+cd service-1-python && python3 -m unittest test_main.py
+```
+
+#### Go (Processor)
+```bash
+cd service-2-go && go test ./...
+```
+
+### Troubleshooting
+
+-   **View Logs**:
+    ```bash
+    podman-compose logs -f service-2-go      # Go subscriber logs
+    podman-compose logs -f service-1-python  # Python simulator logs
+    ```
+-   **Restart a specific service**:
+    ```bash
+    podman-compose restart service-1-python
+    ```
