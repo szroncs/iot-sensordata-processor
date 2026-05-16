@@ -60,16 +60,16 @@ SENSOR_TYPES = {
     },
 }
 
-# In-memory working state — loaded at startup, mutated by CRUD, flushed to disk on Apply.
+# Config state — loaded at startup, if modified saved by 'Apply'
 _config: dict = {}
-_dirty: bool = False  # True when in-memory state differs from the saved file
+_temp_state: bool = False  # True when in-memory state differs from the saved file
 
 
 def _load_config() -> None:
-    global _config, _dirty
+    global _config, _temp_state
     with open(CONFIG_PATH, "r") as f:
         _config = json.load(f)
-    _dirty = False
+    _temp_state = False
     logging.info(
         f"Config loaded from {CONFIG_PATH} ({len(_config.get('sensors', []))} sensors)"
     )
@@ -77,7 +77,7 @@ def _load_config() -> None:
 
 def _save_config() -> None:
     """Write the in-memory config to disk, using a temp file to avoid partial writes."""
-    global _dirty
+    global _temp_state
     config_dir = os.path.dirname(CONFIG_PATH)
     if config_dir:
         os.makedirs(config_dir, exist_ok=True)
@@ -85,7 +85,7 @@ def _save_config() -> None:
     with open(tmp_path, "w") as f:
         json.dump(_config, f, indent=2)
     os.replace(tmp_path, CONFIG_PATH)
-    _dirty = False
+    _temp_state = False
     logging.info(f"Config saved to {CONFIG_PATH}")
 
 
@@ -146,7 +146,7 @@ def index():
         "index",
         sensors=_config.get("sensors", []),
         sensor_types=SENSOR_TYPES,
-        dirty=_dirty,
+        dirty=_temp_state,
         saved=saved,
     )
 
@@ -165,7 +165,7 @@ def new_sensor_form():
 
 @app.route("/sensors/new", method="POST")
 def create_sensor():
-    global _dirty
+    global _temp_state
     form = {k: request.forms.get(k) for k in request.forms}
     errors, parsed = _validate_form(form, is_edit=False)
 
@@ -189,7 +189,7 @@ def create_sensor():
         new_sensor["sample_frequency_seconds"] = parsed["sample_frequency_seconds"]
 
     _config.setdefault("sensors", []).append(new_sensor)
-    _dirty = True
+    _temp_state = True
     logging.info(f"Sensor created in memory: {new_sensor['id']}")
     redirect("/")
 
@@ -211,13 +211,12 @@ def edit_sensor_form(sensor_id):
 
 @app.route("/sensors/<sensor_id>/edit", method="POST")
 def update_sensor(sensor_id):
-    global _dirty
+    global _temp_state
     sensor = _find_sensor(sensor_id)
     if sensor is None:
         bottle.abort(404, f"Sensor '{sensor_id}' not found.")
 
     form = {k: request.forms.get(k) for k in request.forms}
-    # Inject the existing type so frequency validation knows whether to fire
     form["type"] = sensor["type"]
     errors, parsed = _validate_form(form, is_edit=True)
 
@@ -235,18 +234,15 @@ def update_sensor(sensor_id):
     sensor["location"] = parsed["location"]
     if "sample_frequency_seconds" in parsed:
         sensor["sample_frequency_seconds"] = parsed["sample_frequency_seconds"]
-    elif "sample_frequency_seconds" in sensor:
-        # Shouldn't happen, but guard against stale keys on type changes
-        del sensor["sample_frequency_seconds"]
 
-    _dirty = True
+    _temp_state = True
     logging.info(f"Sensor updated in memory: {sensor_id}")
     redirect("/")
 
 
 @app.route("/sensors/<sensor_id>/delete", method="POST")
 def delete_sensor(sensor_id):
-    global _dirty
+    global _temp_state
     sensors = _config.get("sensors", [])
     original_count = len(sensors)
     _config["sensors"] = [s for s in sensors if s["id"] != sensor_id]
@@ -254,14 +250,14 @@ def delete_sensor(sensor_id):
     if len(_config["sensors"]) == original_count:
         bottle.abort(404, f"Sensor '{sensor_id}' not found.")
 
-    _dirty = True
+    _temp_state = True
     logging.info(f"Sensor deleted from memory: {sensor_id}")
     redirect("/")
 
 
 @app.route("/apply", method="POST")
 def apply_config():
-    if _dirty:
+    if _temp_state:
         _save_config()
     redirect("/?saved=1")
 

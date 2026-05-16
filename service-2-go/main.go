@@ -30,20 +30,21 @@ func main() {
 	slog.Info("Initializing middleware pipeline")
 	pipeline := middleware.NewPipeline(influxStore)
 
-	// Configure MQTT Client --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#ClientOptions
+	// Configure MQTT Client --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#NewClientOptions
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(brokerURL)
 	opts.SetClientID("go-processor-01")
 	opts.SetCleanSession(true)
 
 	opts.SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
-		// Handle each message in its own goroutine so the MQTT loop is never blocked --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#ClientOptions.SetDefaultPublishHandler
+		// Handle each message in its own goroutine so the MQTT loop is never blocked
+		// --> https://pkg.go.dev/github.com/eclipse/paho.mqtt.golang#ClientOptions.SetDefaultPublishHandler
 		go pipeline.ProcessMessage(msg.Payload())
 	})
 
 	opts.OnConnect = func(client mqtt.Client) {
 		slog.Info("Connected to MQTT broker", slog.String("url", brokerURL))
-		// QoS 2 on subscribe
+		// QoS 2 on subscribe (Exactly once delivery)
 		if token := client.Subscribe(cfg.MQTTTopic, 2, nil); token.Wait() && token.Error() != nil {
 			slog.Error("Failed to subscribe to MQTT topic", slog.String("error", token.Error().Error()))
 			os.Exit(1)
@@ -63,7 +64,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Wait for termination signal from channel
+	// Listen to signal from buffered channel
+	// os.Interrupt -> POSIX SIGINT user interruption
+	// syscall.SIGTERM -> gracefull shutdown
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	<-sigChan

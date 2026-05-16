@@ -35,7 +35,7 @@ def _reset_state(sensors: list | None = None) -> None:
     admin_app._config = _blank_config()
     if sensors:
         admin_app._config["sensors"] = sensors
-    admin_app._dirty = False
+    admin_app._temp_state = False
 
 
 # ── generate_sensor_id ────────────────────────────────────────────────────────
@@ -303,7 +303,7 @@ class TestConfigIO(unittest.TestCase):
             admin_app._load_config()
             self.assertEqual(len(admin_app._config["sensors"]), 2)
             self.assertEqual(admin_app._config["type_counters"]["temperature"], 2)
-            self.assertFalse(admin_app._dirty)
+            self.assertFalse(admin_app._temp_state)
         finally:
             admin_app.CONFIG_PATH = original_path
             os.unlink(path)
@@ -322,13 +322,13 @@ class TestConfigIO(unittest.TestCase):
                 },
             ]
         )
-        admin_app._dirty = True
+        admin_app._temp_state = True
         original_path = admin_app.CONFIG_PATH
         admin_app.CONFIG_PATH = path
         try:
             admin_app._save_config()
             self.assertTrue(os.path.exists(path))
-            self.assertFalse(admin_app._dirty)
+            self.assertFalse(admin_app._temp_state)
             with open(path) as f:
                 saved = json.load(f)
             self.assertEqual(saved["sensors"][0]["id"], "sim-humidity-01")
@@ -342,7 +342,7 @@ class TestConfigIO(unittest.TestCase):
         tmp_dir = tempfile.mkdtemp()
         path = os.path.join(tmp_dir, "sensors.json")
         _reset_state()
-        admin_app._dirty = True
+        admin_app._temp_state = True
         original_path = admin_app.CONFIG_PATH
         admin_app.CONFIG_PATH = path
         try:
@@ -358,12 +358,12 @@ class TestConfigIO(unittest.TestCase):
         tmp_dir = tempfile.mkdtemp()
         path = os.path.join(tmp_dir, "sensors.json")
         _reset_state()
-        admin_app._dirty = True
+        admin_app._temp_state = True
         original_path = admin_app.CONFIG_PATH
         admin_app.CONFIG_PATH = path
         try:
             admin_app._save_config()
-            self.assertFalse(admin_app._dirty)
+            self.assertFalse(admin_app._temp_state)
         finally:
             admin_app.CONFIG_PATH = original_path
             if os.path.exists(path):

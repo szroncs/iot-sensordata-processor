@@ -18,8 +18,6 @@ from main import (
     simulate_temperature,
 )
 
-# ── Simulation function tests ─────────────────────────────────────────────────
-
 
 class TestSimulateTemperature(unittest.TestCase):
     def test_returns_correct_type(self):
@@ -33,9 +31,8 @@ class TestSimulateTemperature(unittest.TestCase):
             self.assertLessEqual(reading.value, 850.0)
 
     def test_value_rounded_to_two_decimal_places(self):
-        # Protobuf `float` fields are 32-bit; a value set as round(x, 2) may
-        # deviate by ~1e-5 after float32 storage.  places=4 (tol=1e-4) is
-        # wide enough for float32 but still catches genuine rounding failures.
+        # Protobuf `float` is 32-bit and python uses float 64
+        # for the simulation we are completely fine with 2 decimal precision which mitigates the float discrepancy
         reading = simulate_temperature()
         self.assertAlmostEqual(reading.value, round(reading.value, 2), places=4)
 
@@ -116,7 +113,7 @@ class TestSimulateAlert(unittest.TestCase):
         self.assertEqual(reading.severity, sensor_pb2.AlertReading.SEVERITY_CRITICAL)
 
 
-# ── Config loading tests ──────────────────────────────────────────────────────
+# Config tests
 
 
 class TestLoadSensorConfig(unittest.TestCase):
@@ -129,8 +126,6 @@ class TestLoadSensorConfig(unittest.TestCase):
 
     def _valid_config(self, sensors: list) -> dict:
         return {"type_counters": {}, "sensors": sensors}
-
-    # ── happy path ──────────────────────────────────────────────────────────
 
     def test_returns_list_of_sensors(self):
         path = self._write_config(
@@ -231,8 +226,6 @@ class TestLoadSensorConfig(unittest.TestCase):
         self.assertEqual(sensors, [])
         os.unlink(path)
 
-    # ── error path ──────────────────────────────────────────────────────────
-
     def test_missing_file_causes_exit(self):
         with self.assertRaises(SystemExit):
             load_sensor_config("/nonexistent/path/sensors.json")
@@ -246,7 +239,7 @@ class TestLoadSensorConfig(unittest.TestCase):
         os.unlink(tmp.name)
 
 
-# ── SensorState initialisation tests ─────────────────────────────────────────
+# SensorState tests
 
 
 class TestSensorStateInit(unittest.TestCase):

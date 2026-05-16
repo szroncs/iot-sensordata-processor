@@ -11,7 +11,7 @@ import (
 )
 
 // using the WriteAPIBlocking as described in : https://pkg.go.dev/github.com/influxdata/influxdb-client-go/v2/api#WriteAPIBlocking
-// for synchronous calls (for now it's easier to implement)
+// for synchronous calls
 type InfluxStorage struct {
 	client          influxdb2.Client
 	writeAPIRaw     api.WriteAPIBlocking

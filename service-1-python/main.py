@@ -21,8 +21,7 @@ MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_TOPIC = os.getenv("MQTT_TOPIC", "telemetry/sensors")
 SENSOR_CONFIG_PATH = os.getenv("SENSOR_CONFIG_PATH", "./config/sensors.json")
 
-# Physical sensor thresholds — hardware limits used to clamp simulated values.
-# These are NOT the operational validation bounds used by service-2-go.
+# Physical sensor thresholds — hardware limits used to simulate values (validation limits are different)
 SENSOR_THRESHOLDS = {
     "temperature": {"min": -200.0, "max": 850.0},
     "humidity": {"min": 0.0, "max": 100.0},
@@ -130,7 +129,6 @@ class SensorState:
         self.config = sensor_config
         self.last_publish = 0.0
 
-        # Type-specific extra state
         sensor_type = sensor_config["type"]
         if sensor_type == "door":
             self.door_is_open = False

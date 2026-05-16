@@ -2,19 +2,18 @@ syntax = "proto3";
 
 package iot.v1;
 
-// This tells the Go compiler exactly what import path to use based on your go.mod
-option go_package = "iot-sensordata-processor/service-2-go/gen/iot_pb;iot_pb";
-
-// Import the official Google Timestamp definition
+// Timestamp definition
 import "google/protobuf/timestamp.proto";
 
-// The main message envelope
-message SensorReading {
-  string device_id = 1;         // Unique ID of the hardware (e.g., "temp-sensor-01")
-  string location = 2;          // e.g., "Factory-Floor-A"
-  google.protobuf.Timestamp ts = 3; // Precise event time
+option go_package = "iot-sensordata-processor/service-2-go/gen/iot_pb;iot_pb";
 
-  // The 'oneof' wrapper ensures only one payload type is sent per message
+message SensorReading {
+  string device_id = 1;
+  string location = 2;
+  google.protobuf.Timestamp ts = 3;
+
+  // The 'oneof' is a polymorphic wrapper encapsulating multiple msg types
+  // into one wrapper msg payload
   oneof payload {
     TemperatureReading temperature = 4;
     HumidityReading humidity = 5;
@@ -25,20 +24,20 @@ message SensorReading {
 }
 
 message TemperatureReading {
-  float value = 1; // Celsius
+  float value = 1;
 }
 
 message HumidityReading {
-  float value = 1; // Percentage (0-100)
+  float value = 1;
 }
 
 message GasReading {
-  float co2_ppm = 1;      // CO2 concentration
-  float lpg_presence = 2; // LPG or Smoke levels
+  float co2_ppm = 1;
+  float lpg_presence = 2;
 }
 
 message DoorReading {
-  bool is_open = 1; 
+  bool is_open = 1;
 }
 
 message AlertReading {
