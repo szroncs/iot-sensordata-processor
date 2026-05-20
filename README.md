@@ -7,7 +7,7 @@ A full-stack IoT data processing pipeline featuring binary serialization (Protoc
 1.  **sensor-admin**: A web-based management interface used to define and configure sensors in `sensors.json`.
 2.  **service-1-python**: A sensor simulator that reads the configuration, generates mock telemetry, serializes it using **Protobuf**, and publishes it to **MQTT**.
 3.  **MQTT (Mosquitto)**: Acts as the message broker for asynchronous communication.
-4.  **service-2-go**: A high-performance subscriber that validates incoming Protobuf messages using a **middleware pipeline** and stores them in **InfluxDB**.
+4.  **service-2-go**: A high-performance subscriber that (validate)s incoming Protobuf messages using a **middleware pipeline** and stores them in **InfluxDB**.
 5.  **InfluxDB**: Time-series database storing both valid (raw) and invalid telemetry.
 6.  **Grafana**: Visualization platform pre-configured with dashboards to monitor the sensor data.
 
